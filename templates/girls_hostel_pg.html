@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<style>
+/* ---------- HOSTEL IMAGE GALLERY ---------- */
+.hostel-gallery {
+    width: 100%;
+}
+
+.hostel-gallery .row {
+    margin: 0;
+}
+
+.hostel-img-box {
+    padding: 6px;
+}
+
+.hostel-img {
+    width: 100%;
+    height: auto;
+    max-height: 420px;        /* ✅ SAME HEIGHT */
+    object-fit: contain; 
+    border-radius: 8px;  /* ✅ CROPS NICELY */
+    background: #f8f9fa;
+    display: block;
+}
+</style>
+
+<div class="container my-4">
+
+    <h2 class="text-center mb-4">🏠 Girls Hostels Near VIT Bibwewadi</h2>
+
+    {% for hostel in hostels %}
+    <div class="card mb-4 shadow-sm">
+
+        <!-- ✅ IMAGE GALLERY -->
+        <div class="hostel-gallery">
+            <div class="row g-3">
+                {% for img in hostel.images.split(',') %}
+                <div class="col-md-6 hostel-img-box">
+                    <img
+                        src="{{ url_for('static', filename='images/' ~ img.strip()) }}"
+                        class="hostel-img"
+                        alt="{{ hostel.name }}"
+                    >
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- DETAILS -->
+        <div class="card-body">
+            <h5 class="card-title">{{ hostel.name }}</h5>
+
+            <p class="card-text">{{ hostel.description }}</p>
+
+            <p class="mb-1">📍 <strong>Address:</strong> {{ hostel.address }}</p>
+            <p class="mb-3">📞 <strong>Contact:</strong> {{ hostel.contact }}</p>
+
+            <!-- MAP -->
+            <iframe
+    src="{{ hostel.google_map_link }}"
+    width="100%"
+    height="300"
+    style="border:0; border-radius:8px;"
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+        </div>
+
+    </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

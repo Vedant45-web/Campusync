@@ -1,0 +1,192 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="content-section">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Join Today</legend>
+
+            <!-- Username -->
+            <div class="form-group">
+                {{ form.username.label(class="form-control-label") }}
+                {{ form.username(class="form-control form-control-lg") }}
+                {% for error in form.username.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                {{ form.email.label(class="form-control-label") }}
+                {{ form.email(class="form-control form-control-lg") }}
+                 {% for error in form.email.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+            
+            <!--Gender-->
+            <div class="mb-3">
+    {{ form.gender.label(class="form-label") }}
+    {{ form.gender(class="form-select") }}
+    {% if form.gender.errors %}
+        <div class="text-danger">{{ form.gender.errors[0] }}</div>
+    {% endif %}
+</div>
+            <!-- College ID -->
+            <div class="form-group">
+                {{ form.college_id.label(class="form-control-label") }}
+                {{ form.college_id(
+                    class="form-control",
+                    placeholder="Enter 7-digit College ID",
+                    oninput="checkCollegeId(this)"
+                ) }}
+                <small id="collegeHelp"></small>
+                {% for error in form.college_id.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+
+            <!-- College -->
+            <div class="form-group">
+                {{ form.college.label(class="form-control-label") }}
+                {{ form.college(class="form-control form-control-lg") }}
+            </div>
+
+            <!-- Branch -->
+            <div class="form-group">
+                {{ form.branch.label(class="form-control-label") }}
+                {{ form.branch(class="form-control form-control-lg") }}
+            </div>
+
+            <!-- City -->
+            <div class="form-group">
+                {{ form.city.label(class="form-control-label") }}
+                {{ form.city(class="form-control form-control-lg") }}
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                {{ form.password.label(class="form-control-label") }}
+
+                <div class="input-group">
+                    {{ form.password(
+                        class="form-control",
+                        id="password",
+                        oninput="checkStrength()"
+                    ) }}
+                    <div class="input-group-append">
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                onclick="togglePassword()">
+                            👁
+                        </button>
+                    </div>
+                </div>
+
+                <small id="pwdHelp"></small>
+
+                <small class="text-muted">
+                    Password must contain:
+                    <ul class="mb-0">
+                        <li>At least 8 characters</li>
+                        <li>1 letter</li>
+                        <li>1 number</li>
+                        <li>1 special character</li>
+                    </ul>
+                </small>
+
+                {% for error in form.password.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                {{ form.confirm_password.label(class="form-control-label") }}
+
+                <div class="input-group">
+                    {{ form.confirm_password(
+                        class="form-control",
+                        id="confirm_password"
+                    ) }}
+                    <div class="input-group-append">
+                        <button type="button"
+                                class="btn btn-outline-secondary"
+                                onclick="toggleConfirmPassword()">
+                            👁
+                        </button>
+                    </div>
+                </div>
+
+                {% for error in form.confirm_password.errors %}
+                    <small class="text-danger">{{ error }}</small>
+                {% endfor %}
+            </div>
+
+        </fieldset>
+
+        
+        <div class="form-group mt-3">
+            {{ form.submit(class="btn btn-primary btn-block") }}
+        </div>
+
+    </form>
+</div>
+
+
+
+<script>
+function togglePassword() {
+    const pwd = document.getElementById("password");
+    pwd.type = pwd.type === "password" ? "text" : "password";
+}
+</script>
+
+<script>
+function toggleConfirmPassword() {
+    const field = document.getElementById("confirm_password");
+    field.type = field.type === "password" ? "text" : "password";
+}
+</script>
+
+<script>
+function checkCollegeId(input) {
+    const msg = document.getElementById("collegeHelp");
+
+    if (/^\d{7}$/.test(input.value)) {
+        msg.textContent = "Valid College ID ✅";
+        msg.style.color = "green";
+    } else {
+        msg.textContent = "College ID must be exactly 7 digits";
+        msg.style.color = "red";
+    }
+}
+</script>
+
+<script>
+function checkStrength() {
+    const pwd = document.getElementById("password").value;
+    const msg = document.getElementById("pwdHelp");
+
+    let strength = 0;
+    if (pwd.length >= 8) strength++;
+    if (/[A-Za-z]/.test(pwd)) strength++;
+    if (/\d/.test(pwd)) strength++;
+    if (/[@$!%*#?&]/.test(pwd)) strength++;
+
+    if (strength <= 1) {
+        msg.textContent = "Weak ❌";
+        msg.style.color = "red";
+    } else if (strength <= 3) {
+        msg.textContent = "Medium ⚠";
+        msg.style.color = "orange";
+    } else {
+        msg.textContent = "Strong ✅";
+        msg.style.color = "green";
+    }
+}
+</script>
+
+{% endblock content %}

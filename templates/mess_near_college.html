@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mess Near College</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <style>
+        /* ---------- COMMON INFO CARD ---------- */
+        .info-card {
+            background: #ffffff;
+            border-left: 5px solid #198754;
+        }
+
+        /* ---------- IMAGE GALLERY (SMART & SAFE) ---------- */
+        .mess-gallery {
+            width: 100%;
+            overflow: hidden;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .mess-gallery img {
+            width: 100%;
+            height: 640px;
+            object-fit: contain;
+            border-radius: 6px;
+
+        }
+
+        /* 1 IMAGE */
+        .gallery-1 {
+            display: grid;
+            grid-template-columns: 1fr;
+        }
+
+        /* 2 IMAGES */
+        .gallery-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        /* 3 OR MORE IMAGES */
+        .gallery-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+<div class="container my-4">
+
+    <h2 class="mb-4 text-center">🍽 Best Mess Near VIT Bibwewadi</h2>
+
+    <!-- ✅ COMMON DESCRIPTION -->
+    <div class="card info-card mb-4 shadow-sm">
+        <div class="card-body">
+            <h5 class="mb-2">📍 Bibwewadi Khau Galli – Student Mess Zone</h5>
+
+            <p class="mb-2">
+                All the messes listed below are located in <strong>Bibwewadi Khau Galli</strong>,
+                just <strong>950 meters (5 minutes walking)</strong> from
+                <strong>VIT Bibwewadi College</strong>.
+                These messes are located in the <strong>same line and opposite each other</strong>,
+                making it very convenient for students.
+            </p>
+
+            <p class="mb-2">
+                The <strong>meal rates are almost the same for all messes</strong>:
+            </p>
+
+            <ul class="mb-2">
+                <li>₹40–₹50 → 1 bhaji with 3 chapatis</li>
+                <li>₹55–₹60 → 2 bhaji with 3 chapatis</li>
+                <li>₹70–₹80 → Rice plate (chapati + rice + bhaji)</li>
+            </ul>
+
+            <p class="mb-0">
+                Some messes also offer <strong>rice varieties</strong> like dal rice,
+                masala rice, and special thalis on selected days.
+                Apart from the messes listed here, there are
+                <strong>other messes also available in the same line</strong>.
+            </p>
+        </div>
+    </div>
+
+    <!-- ✅ MESS LIST -->
+    {% for mess in messes %}
+    <div class="card mb-4 shadow-sm">
+
+        <!-- IMAGE GALLERY -->
+        <div class="mess-gallery">
+            {% set imgs = mess.images.split(',') %}
+            {% set count = imgs | length %}
+
+            <div class="
+                {% if count == 1 %}gallery-1
+                {% elif count == 2 %}gallery-2
+                {% else %}gallery-3
+                {% endif %}
+            ">
+                {% for img in imgs %}
+                <img
+                    src="{{ url_for('static', filename='images/' ~ img.strip()) }}"
+                    alt="{{ mess.name }}"
+                >
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- CARD BODY -->
+        <div class="card-body">
+            <h5 class="card-title">{{ mess.name }}</h5>
+
+            <p class="card-text">{{ mess.description }}</p>
+
+            <p class="mb-1">
+                📍 <strong>Address:</strong> {{ mess.address }}
+            </p>
+
+            <p class="mb-3">
+                📞 <strong>Contact:</strong> {{ mess.contact }}
+            </p>
+
+            <!-- AUTO MAP -->
+           <iframe
+    src="{{ mess.google_map_link }}"
+    width="100%"
+    height="300"
+    style="border:0; border-radius:8px;"
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+        </div>
+
+    </div>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

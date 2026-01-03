@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h2 class="mb-3">Your Profile</h2>
+<hr>
+
+
+<div class="text-center mb-4">
+    <img src="{{ url_for('static', filename='profile_pics/' + current_user.image_file) }}"
+         class="rounded-circle border shadow"
+         width="150"
+         height="150"
+         alt="Profile Picture"
+         >
+</div>
+
+
+<h4>Update Profile</h4>
+<form method="POST" enctype="multipart/form-data">
+    {{ profile_form.hidden_tag() }}
+
+    {{ profile_form.username.label }}
+    {{ profile_form.username(class="form-control") }}
+
+    {{ profile_form.college.label }}
+    {{ profile_form.college(class="form-control") }}
+
+    {{ profile_form.branch.label }}
+    {{ profile_form.branch(class="form-control") }}
+
+    {{ profile_form.city.label }}
+    {{ profile_form.city(class="form-control") }}
+
+    {{ profile_form.gender.label }}
+    {{ profile_form.gender(class="form-control") }}
+
+    {{ profile_form.picture.label }}
+    {{ profile_form.picture(class="form-control-file") }}
+
+    {{ profile_form.submit(class="btn btn-primary mt-3") }}
+</form>
+
+<hr>
+
+
+<h4>Change Email</h4>
+<form method="POST">
+    {{ email_form.hidden_tag() }}
+
+    {{ email_form.email.label }}
+    {{ email_form.email(class="form-control") }}
+
+    {{ email_form.submit(class="btn btn-warning mt-2") }}
+</form>
+
+<hr>
+
+
+<h4>Change Password</h4>
+<form method="POST">
+    {{ password_form.hidden_tag() }}
+
+    {{ password_form.old_password.label }}
+    {{ password_form.old_password(class="form-control") }}
+
+    {{ password_form.new_password.label }}
+    {{ password_form.new_password(class="form-control") }}
+
+    {{ password_form.confirm_password.label }}
+    {{ password_form.confirm_password(class="form-control") }}
+
+    {{ password_form.submit(class="btn btn-danger mt-2") }}
+</form>
+
+{% endblock %}
