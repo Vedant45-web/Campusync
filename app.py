@@ -189,13 +189,11 @@ def delete_message(message_id):
 
 # ---------- HOSTEL / MESS ----------
 @app.route("/Hostel_PG")
-@login_required
 def hostel_pg():
     return render_template('hostel_pg.html')
 
 
 @app.route("/Mess_Near_College")
-@login_required
 def mess_near_college():
     messes = Mess.query.all()
     return render_template('mess_near_college.html', messes=messes)
@@ -203,14 +201,12 @@ def mess_near_college():
 
 # ---------- HOSTEL / PG ----------
 @app.route("/hostel-pg/boys")
-@login_required
 def boys_hostel_pg():
     hostels = Hostel.query.filter_by(category="boys").all()
     return render_template("boys_hostel_pg.html", hostels=hostels)
 
 
 @app.route("/hostel-pg/girls")
-@login_required
 def girls_hostel_pg():
     hostels = Hostel.query.filter_by(category="girls").all()
     return render_template("girls_hostel_pg.html", hostels=hostels)
@@ -289,6 +285,16 @@ def logout():
 # ================= DB INIT =================
 with app.app_context():
     db.create_all()
+
+def run_seed_once():
+        from seed import seed_mess, seed_girls_hostels, seed_boys_hostels
+        seed_mess()
+        seed_girls_hostels()
+        seed_boys_hostels()
+        print("✅ Seed data auto-inserted")
+
+with app.app_context():
+    run_seed_once()
 
 
 if __name__ == '__main__':
