@@ -295,10 +295,10 @@ def run_seed_once():
         seed_boys_hostels()
         print("✅ Seed data auto-inserted")
 
-with app.app_context():
-    run_seed_once()
+
 
 
 if __name__ == '__main__':
     app.run()
+
 
