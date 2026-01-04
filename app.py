@@ -77,6 +77,12 @@ class Hostel(db.Model):
     contact = db.Column(db.String(50), nullable=True)
 
 
+# ⭐ NEW: Seed status (IMPORTANT)
+class SeedStatus(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    seeded = db.Column(db.Boolean, default=False)
+
+
 # ================= LOGIN =================
 @login_manager.user_loader
 def load_user(user_id):
@@ -139,10 +145,7 @@ def profile():
         profile_form.username.data = current_user.username
         profile_form.city.data = current_user.city
 
-    image_file = url_for(
-        'static',
-        filename='profile_pics/' + current_user.image_file
-    )
+    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 
     return render_template(
         'profile.html',
@@ -199,7 +202,6 @@ def mess_near_college():
     return render_template('mess_near_college.html', messes=messes)
 
 
-# ---------- HOSTEL / PG ----------
 @app.route("/hostel-pg/boys")
 def boys_hostel_pg():
     hostels = Hostel.query.filter_by(category="boys").all()
@@ -282,23 +284,30 @@ def logout():
     return redirect(url_for('login'))
 
 
-# ================= DB INIT =================
-with app.app_context():
-    db.create_all()
-
+# ================= SEED (SAFE RUN ONCE) =================
 def run_seed_once():
-    if Mess.query.first() is None:
-        from seed import seed_mess, seed_girls_hostels, seed_boys_hostel
-        
+    from seed import seed_mess, seed_girls_hostels, seed_boys_hostels
+
+    status = SeedStatus.query.first()
+    if not status:
         seed_mess()
         seed_girls_hostels()
         seed_boys_hostels()
-        print("✅ Seed data auto-inserted")
+        db.session.add(SeedStatus(seeded=True))
+        db.session.commit()
+        print("✅ Seed completed")
+    else:
+        print("ℹ️ Seed already done")
 
 
+# ================= DB INIT =================
+with app.app_context():
+    db.create_all()
+    run_seed_once()
 
 
 if __name__ == '__main__':
     app.run()
+
 
 
