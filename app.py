@@ -287,7 +287,9 @@ with app.app_context():
     db.create_all()
 
 def run_seed_once():
-        from seed import seed_mess, seed_girls_hostels, seed_boys_hostels
+    if Mess.query.first() is None:
+        from seed import seed_mess, seed_girls_hostels, seed_boys_hostel
+        
         seed_mess()
         seed_girls_hostels()
         seed_boys_hostels()
@@ -299,3 +301,4 @@ with app.app_context():
 
 if __name__ == '__main__':
     app.run()
+
