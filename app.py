@@ -282,32 +282,26 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
-
-
-# ================= SEED (SAFE RUN ONCE) =================
-def run_seed_once():
+def seed_if_empty():
     from seed import seed_mess, seed_girls_hostels, seed_boys_hostels
 
-    status = SeedStatus.query.first()
-    if not status:
+    if Mess.query.first() is None:
         seed_mess()
+        print("✅ Mess seeded")
+
+    if Hostel.query.first() is None:
         seed_girls_hostels()
         seed_boys_hostels()
-        db.session.add(SeedStatus(seeded=True))
-        db.session.commit()
-        print("✅ Seed completed")
-    else:
-        print("ℹ️ Seed already done")
+        print("✅ Hostels seeded")
 
 
-# ================= DB INIT =================
 with app.app_context():
     db.create_all()
-    run_seed_once()
-
+    seed_if_empty()
 
 if __name__ == '__main__':
     app.run()
+
 
 
 
