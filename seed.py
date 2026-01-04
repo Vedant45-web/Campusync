@@ -1,4 +1,4 @@
-from app import app, db, Mess, Hostel
+from app import db, Mess, Hostel,app
 
 # ------------------ SEED MESS ------------------
 def seed_mess():
@@ -222,4 +222,5 @@ if __name__ == "__main__":
         seed_mess()
         seed_girls_hostels()
         seed_boys_hostels()
+
         print("🎉 All seed data inserted successfully")
